@@ -9,7 +9,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<br>
+<a href="meals?action=add">Add meal</a>
 <style type="text/css">
     TABLE {
         border-collapse: collapse;
@@ -22,11 +22,13 @@
         padding: 4px;
     }
 </style>
+<br><br>
     <table>
         <tr>
             <th>Date</th>
             <th>Description</th>
             <th>Calories</th>
+            <th colspan=2>Action</th>
         </tr>
         <jsp:useBean id="meals" scope="request" type="java.util.List"/>
         <c:forEach items="${meals}" var="meal">
@@ -34,6 +36,12 @@
                 <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
+                <td>
+                    <a href="meals?action=edit&id=${meal.id}">Update</a>
+                </td>
+                <td>
+                    <a href="meals?action=delete&id=${meal.id}">Delete</a>
+                </td>
             </tr>
         </c:forEach>
     </table>

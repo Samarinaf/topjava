@@ -8,4 +8,9 @@ public interface MealDao {
 
     List<Meal> findAll();
 
+    void save(Meal meal);
+
+    void delete(Integer id);
+
+    Meal find(Integer id);
 }
