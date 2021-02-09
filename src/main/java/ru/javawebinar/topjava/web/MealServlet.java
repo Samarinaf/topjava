@@ -60,7 +60,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "add":
                 log.debug("redirect to editMeal.jsp");
-                Meal newMeal = new Meal();
+                Meal newMeal = new Meal(null, null, "", 0);
                 request.setAttribute("meal", newMeal);
                 request.setAttribute("title", "Add meal");
                 request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
