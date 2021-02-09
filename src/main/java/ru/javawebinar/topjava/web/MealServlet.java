@@ -21,7 +21,7 @@ import java.util.List;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private static final int CALORIES_PER_DAY = 2000;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private MealDao mealDao;
 
@@ -47,7 +47,6 @@ public class MealServlet extends HttpServlet {
                 int mealId = Integer.parseInt(request.getParameter("id"));
                 Meal meal = mealDao.find(mealId);
                 request.setAttribute("meal", meal);
-                request.setAttribute("title", "Edit meal");
                 request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
                 break;
             case "meals":
@@ -62,7 +61,6 @@ public class MealServlet extends HttpServlet {
                 log.debug("redirect to editMeal.jsp");
                 Meal newMeal = new Meal(null, null, "", 0);
                 request.setAttribute("meal", newMeal);
-                request.setAttribute("title", "Add meal");
                 request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
                 break;
             default:
@@ -75,13 +73,13 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        int id = request.getParameter("id").isEmpty() ? 0 : Integer.parseInt(request.getParameter("id"));
+        Integer id = request.getParameter("id").isEmpty() ? null : Integer.parseInt(request.getParameter("id"));
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
 
         Meal meal = new Meal(id, dateTime, description, calories);
-        log.debug(id == 0 ? "add new meal" : "update meal with id {}", id);
+        log.debug(id == null ? "add new meal" : "update meal with id {}", id);
         mealDao.save(meal);
 
         response.sendRedirect("meals");

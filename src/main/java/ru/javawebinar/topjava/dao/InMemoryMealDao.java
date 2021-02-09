@@ -33,15 +33,18 @@ public class InMemoryMealDao implements MealDao {
 
     @Override
     public Meal save(Meal meal) {
-        if (meal.getId() == null || !meals.containsKey(meal.getId())) {
+        if (meal.getId() == null) {
             meal.setId(counter.incrementAndGet());
+        } else {
+            if (!meals.containsKey(meal.getId())) return null;
         }
-        return meals.put(meal.getId(), meal);
+        meals.put(meal.getId(), meal);
+        return meals.get(meal.getId());
     }
 
     @Override
     public boolean delete(int id) {
-        return meals.remove(id, meals.get(id));
+        return meals.remove(id) != null;
     }
 
     @Override

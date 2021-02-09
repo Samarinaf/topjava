@@ -6,7 +6,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<h2>${title}</h2>
+<h2>${meal.id == null ? "Add meal" : "Edit meal"}</h2>
 <br>
     <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
