@@ -8,9 +8,9 @@ public interface MealDao {
 
     List<Meal> findAll();
 
-    void save(Meal meal);
+    Meal save(Meal meal);
 
-    void delete(Integer id);
+    boolean delete(int id);
 
-    Meal find(Integer id);
+    Meal find(int id);
 }

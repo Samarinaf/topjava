@@ -6,7 +6,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<h2>Edit meal</h2>
+<h2>${title}</h2>
 <br>
     <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
@@ -22,7 +22,7 @@
         </p>
         <p>
             <label for="cal">
-                Calories: <input type="text" id="cal" name="calories" value="${meal.calories}" required><br>
+                Calories: <input type="number" id="cal" name="calories" value="${meal.calories}" required><br>
             </label>
         </p>
         <input type="submit" value="Save">
