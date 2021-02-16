@@ -1,8 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
-<%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
 <html>
 <head>
     <title>Meal list</title>
@@ -37,9 +36,6 @@
             <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr class="${meal.excess ? 'excess' : 'normal'}">
                 <td>
-                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
-                        <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
                         ${fn:formatDateTime(meal.dateTime)}
                 </td>
                 <td>${meal.description}</td>
@@ -49,6 +45,19 @@
             </tr>
         </c:forEach>
     </table>
+    <br><br>
+    <h4>Filter</h4>
+    <form name="filter" method="get" action="meals">
+        <input type="hidden" value="filter" name="action">
+            From date <input type="date" value="${param.minDate}" name="minDate">
+            To date <input type="date" value="${param.maxDate}" name="maxDate">
+            <br><br>
+            From time <input type="time" value="${param.minTime}" name="minTime">
+            To time <input type="time" value="${param.maxTime}" name="maxTime">
+            <br><br>
+        <button type="submit">Filter</button>
+        <button type="button" onclick="window.history.back()" >Cancel</button>
+    </form>
 </section>
 </body>
 </html>

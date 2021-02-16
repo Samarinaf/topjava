@@ -3,9 +3,12 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,9 +27,10 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
+            meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
-        } else if (repository.get(meal.getId()).getUserId() != userId) {
+        } else if (get(meal.getId(), userId) == null) {
             return null;
         }
         // handle case: update, but not present in storage
@@ -35,27 +39,27 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal meal = repository.get(id);
-        if (meal == null || meal.getUserId() != userId) {
-            return false;
-        }
-        return repository.remove(id) != null;
+        return get(id, userId) != null && repository.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
         Meal meal = repository.get(id);
-        if (meal == null || meal.getUserId() != userId) {
-            return null;
-        }
-        return meal;
+        return meal == null || meal.getUserId() != userId ? null : meal;
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public List<Meal> getAll(int userId) {
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
-                .sorted(((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime())))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getFilteredByDate(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return getAll(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), startDate, endDate))
                 .collect(Collectors.toList());
     }
 }
