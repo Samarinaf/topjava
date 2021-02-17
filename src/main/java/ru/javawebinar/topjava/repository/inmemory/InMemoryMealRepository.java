@@ -6,12 +6,14 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -50,16 +52,19 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return repository.values().stream()
-                .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return filterByPredicate(repository.values(), userId, meal -> true);
     }
 
     @Override
-    public List<Meal> getFilteredByDate(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), startDate, endDate))
+    public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
+        return filterByPredicate(repository.values(), userId, meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate));
+    }
+
+    private List<Meal> filterByPredicate(Collection<Meal> meals, int userId, Predicate<Meal> filter) {
+        return meals.stream()
+                .filter(meal -> meal.getUserId() == userId)
+                .filter(filter)
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
 }

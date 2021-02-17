@@ -20,7 +20,8 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        log.debug("redirect to meals");
         SecurityUtil.setUserId(Integer.parseInt(req.getParameter("userId")));
         resp.sendRedirect("meals");
     }

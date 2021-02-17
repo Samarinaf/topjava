@@ -32,7 +32,7 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
@@ -40,7 +40,7 @@ public class MealServlet extends HttpServlet {
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")),
-                SecurityUtil.authUserId());
+                null);
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         if (meal.isNew()) {
@@ -69,10 +69,10 @@ public class MealServlet extends HttpServlet {
                 String minTime = request.getParameter("minTime");
                 String maxTime = request.getParameter("maxTime");
                 List<MealTo> filtered = controller.getFiltered(
-                        minDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(minDate),
-                        maxDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(maxDate),
-                        minTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(minTime),
-                        maxTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(maxTime)
+                        minDate == null || minDate.isEmpty() ? null : LocalDate.parse(minDate),
+                        maxDate == null || maxDate.isEmpty() ? null : LocalDate.parse(maxDate),
+                        minTime == null || minTime.isEmpty() ? null : LocalTime.parse(minTime),
+                        maxTime == null || maxTime.isEmpty() ? null : LocalTime.parse(maxTime)
                 );
                 request.setAttribute("meals", filtered);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);

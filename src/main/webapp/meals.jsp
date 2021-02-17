@@ -21,6 +21,18 @@
     <hr/>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
+    <h4>Filter</h4>
+    <form name="filter" method="get" action="meals">
+        <input type="hidden" value="filter" name="action">
+        From date <input type="date" value="${param.minDate}" name="minDate">
+        To date <input type="date" value="${param.maxDate}" name="maxDate">
+        <br><br>
+        From time <input type="time" value="${param.minTime}" name="minTime">
+        To time <input type="time" value="${param.maxTime}" name="maxTime">
+        <br><br>
+        <button type="submit">Filter</button>
+        <button type="button" onclick="window.history.back()" >Cancel</button>
+    </form>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -46,18 +58,6 @@
         </c:forEach>
     </table>
     <br><br>
-    <h4>Filter</h4>
-    <form name="filter" method="get" action="meals">
-        <input type="hidden" value="filter" name="action">
-            From date <input type="date" value="${param.minDate}" name="minDate">
-            To date <input type="date" value="${param.maxDate}" name="maxDate">
-            <br><br>
-            From time <input type="time" value="${param.minTime}" name="minTime">
-            To time <input type="time" value="${param.maxTime}" name="maxTime">
-            <br><br>
-        <button type="submit">Filter</button>
-        <button type="button" onclick="window.history.back()" >Cancel</button>
-    </form>
 </section>
 </body>
 </html>
