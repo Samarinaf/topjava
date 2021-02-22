@@ -41,7 +41,6 @@
             <th>Date</th>
             <th>Description</th>
             <th>Calories</th>
-            <th>Calories</th>
             <th></th>
             <th></th>
         </tr>
