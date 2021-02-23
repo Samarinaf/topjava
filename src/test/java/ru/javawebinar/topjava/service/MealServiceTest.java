@@ -15,7 +15,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
@@ -49,13 +48,13 @@ public class MealServiceTest {
     @Test
     public void duplicateDateTimeCreate() {
         Assert.assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(null, LocalDateTime.of(2021, Month.JANUARY, 21, 7, 0), "Duplicate", 100), UserTestData.USER_ID));
+                service.create(new Meal(null, userMeal.getDateTime(), "Duplicate", 100), UserTestData.USER_ID));
     }
 
     @Test
     public void get() {
         Meal meal = service.get(USER_MEAL_ID, UserTestData.USER_ID);
-        assertMatch(meal, userMeal1);
+        assertMatch(meal, userMeal);
     }
 
     @Test
@@ -64,7 +63,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getNotValid() {
+    public void getByAnotherUser() {
         Assert.assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, UserTestData.ADMIN_ID));
     }
 
@@ -75,12 +74,12 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deletedNotFound() {
+    public void deleteNotFound() {
         Assert.assertThrows(NotFoundException.class, () -> service.delete(UserTestData.NOT_FOUND, UserTestData.USER_ID));
     }
 
     @Test
-    public void deleteNotValid() {
+    public void deleteByAnotherUser() {
         Assert.assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_ID, UserTestData.ADMIN_ID));
     }
 
@@ -92,24 +91,41 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateNotValid() {
+    public void updateByAnotherUser() {
         Assert.assertThrows(NotFoundException.class, () -> service.update(getUpdated(), UserTestData.ADMIN_ID));
     }
 
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(UserTestData.USER_ID);
-        assertMatch(all, userMeal1, userMeal2, userMeal3);
+        assertMatch(all, getAllFromUser());
     }
 
     @Test
     public void getBetweenInclusive() {
         List<Meal> adminMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 20),
                 LocalDate.of(2021, Month.JANUARY, 20), UserTestData.ADMIN_ID);
-        assertMatch(adminMeals, adminMeal1, adminMeal2, adminMeal3);
+        assertMatch(adminMeals, putInDescOrder(adminMeal4, adminMeal5, adminMeal6));
 
         List<Meal> userMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 10),
                 LocalDate.of(2021, Month.JANUARY, 11), UserTestData.USER_ID);
         Assert.assertTrue(userMeals.isEmpty());
+    }
+
+    @Test
+    public void getBetweenInclusiveAtMidnight() {
+        List<Meal> meals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 22),
+                LocalDate.of(2021, Month.JANUARY, 22), UserTestData.USER_ID);
+        assertMatch(meals, userMeal);
+
+        List<Meal> userMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 21),
+                LocalDate.of(2021, Month.JANUARY, 21), UserTestData.USER_ID);
+        assertMatch(userMeals, putInDescOrder(userMeal1, userMeal2, userMeal3));
+    }
+
+    @Test
+    public void getBetweenInclusiveWithNullDates() {
+        List<Meal> meals = service.getBetweenInclusive(null, null, UserTestData.ADMIN_ID);
+        assertMatch(meals, getAllFromAdmin());
     }
 }
