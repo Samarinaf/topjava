@@ -6,9 +6,6 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
@@ -54,19 +51,5 @@ public class MealTestData {
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
         Assertions.assertThat(actual).usingRecursiveFieldByFieldElementComparator().isEqualTo(expected);
-    }
-
-    public static Iterable<Meal> getAllFromUser() {
-        return putInDescOrder(userMeal, userMeal1, userMeal2, userMeal3, userMeal4, userMeal5, userMeal6, userMeal7);
-    }
-
-    public static Iterable<Meal> getAllFromAdmin() {
-        return putInDescOrder(adminMeal, adminMeal1, adminMeal2, adminMeal3, adminMeal4, adminMeal5, adminMeal6);
-    }
-
-    public static Iterable<Meal> putInDescOrder(Meal... meals) {
-        return Stream.of(meals)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
     }
 }

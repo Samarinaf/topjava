@@ -21,7 +21,7 @@ import java.util.List;
 import static ru.javawebinar.topjava.MealTestData.*;
 
 @ContextConfiguration({
-        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-app-jdbc.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
@@ -98,14 +98,14 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(UserTestData.USER_ID);
-        assertMatch(all, getAllFromUser());
+        assertMatch(all, userMeal, userMeal3, userMeal2, userMeal1, userMeal7, userMeal6, userMeal5, userMeal4);
     }
 
     @Test
     public void getBetweenInclusive() {
         List<Meal> adminMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 20),
                 LocalDate.of(2021, Month.JANUARY, 20), UserTestData.ADMIN_ID);
-        assertMatch(adminMeals, putInDescOrder(adminMeal4, adminMeal5, adminMeal6));
+        assertMatch(adminMeals, adminMeal6, adminMeal5, adminMeal4);
 
         List<Meal> userMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 10),
                 LocalDate.of(2021, Month.JANUARY, 11), UserTestData.USER_ID);
@@ -120,12 +120,12 @@ public class MealServiceTest {
 
         List<Meal> userMeals = service.getBetweenInclusive(LocalDate.of(2021, Month.JANUARY, 21),
                 LocalDate.of(2021, Month.JANUARY, 21), UserTestData.USER_ID);
-        assertMatch(userMeals, putInDescOrder(userMeal1, userMeal2, userMeal3));
+        assertMatch(userMeals, userMeal3, userMeal2, userMeal1);
     }
 
     @Test
     public void getBetweenInclusiveWithNullDates() {
         List<Meal> meals = service.getBetweenInclusive(null, null, UserTestData.ADMIN_ID);
-        assertMatch(meals, getAllFromAdmin());
+        assertMatch(meals, adminMeal3, adminMeal2, adminMeal1, adminMeal, adminMeal6, adminMeal5, adminMeal4);
     }
 }
