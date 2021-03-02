@@ -29,7 +29,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     @Rule
-    public final StopWatchTest stopWatchTest = new StopWatchTest();
+    public final StopWatchRule stopWatchRule = new StopWatchRule();
 
     @Autowired
     private MealService service;
@@ -116,6 +116,6 @@ public class MealServiceTest {
 
     @AfterClass
     public static void logOut() {
-        System.out.println(StopWatchTest.testInfo);
+        StopWatchRule.logClassInfo();
     }
 }
