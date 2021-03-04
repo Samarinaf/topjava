@@ -27,8 +27,7 @@ public class JpaMealRepository implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-            Meal oldMeal = em.find(Meal.class, meal.getId());
-            if (get(oldMeal.id(), userId) == null) {
+            if (get(meal.id(), userId) == null) {
                 return null;
             }
             User ref = em.getReference(User.class, userId);

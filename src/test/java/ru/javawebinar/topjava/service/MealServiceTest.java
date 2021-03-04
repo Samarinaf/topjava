@@ -34,6 +34,11 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
+    @AfterClass
+    public static void logOut() {
+        StopWatchRule.logClassInfo();
+    }
+
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
@@ -65,7 +70,6 @@ public class MealServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() {
@@ -112,10 +116,5 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
-    }
-
-    @AfterClass
-    public static void logOut() {
-        StopWatchRule.logClassInfo();
     }
 }
