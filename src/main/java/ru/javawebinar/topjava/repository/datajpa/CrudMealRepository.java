@@ -13,7 +13,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
-    @Modifying
     @Query(name = Meal.ALL_SORTED)
     List<Meal> findAll(@Param("userId") int userId);
 
@@ -22,7 +21,8 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query(name = Meal.DELETE)
     int delete(@Param("id") int id, @Param("userId") int userId);
 
-    Meal getMealByIdAndUserId(int id, int userId);
+    @Query("SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
+    Meal findOne(@Param("id") int id, @Param("userId") int userId);
 
     @Query(name = Meal.GET_BETWEEN)
     List<Meal> findAllFiltered(@Param("startDateTime") LocalDateTime startDateTime,

@@ -17,7 +17,7 @@ public class PostgresJdbcMealRepository extends AbstractJdbcMealRepository<Local
     }
 
     @Override
-    protected LocalDateTime dateTimeConvertor(LocalDateTime localDateTime) {
+    protected LocalDateTime convertDateTime(LocalDateTime localDateTime) {
         return localDateTime;
     }
 }
