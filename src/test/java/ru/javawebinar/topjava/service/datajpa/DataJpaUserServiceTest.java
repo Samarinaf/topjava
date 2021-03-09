@@ -28,7 +28,8 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     @Test
     public void getWithEmptyMeals() {
         User newUser = service.create(getNew());
-        USER_MATCHER.assertMatch(service.getWithMeals(newUser.id()), newUser);
-        Assert.assertNull(newUser.getMeals());
+        User userWithMeals = service.getWithMeals(newUser.id());
+        USER_MATCHER.assertMatch(userWithMeals, newUser);
+        Assert.assertTrue(userWithMeals.getMeals().isEmpty());
     }
 }
