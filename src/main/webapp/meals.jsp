@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
+    <h3><a href="index.jsp">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
     <form method="get" action="meals">
@@ -40,7 +40,6 @@
         <tr>
             <th>Date</th>
             <th>Description</th>
-            <th>Calories</th>
             <th>Calories</th>
             <th></th>
             <th></th>
